@@ -19,7 +19,8 @@ export default function HorizontalLinearStepper() {
   const [input,setInput]=React.useState("");
   const [textAreaValue,setTextAreaValue]=React.useState("")
   const [file,setFile]=React.useState("")
-  const [gender,setGender]=React.useState("")
+  const [gender,setGender]=React.useState("");
+  const [showBtn,setShowBtn]= React.useState(false)
 
 
   const handleChange = (event) => {
@@ -51,13 +52,15 @@ export default function HorizontalLinearStepper() {
 
   const handleNext = () => {
     let newSkipped = skipped;
+    
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep((prevActiveStep) => (prevActiveStep ===3 ? setShowBtn(true) : prevActiveStep + 1));
+    
     setSkipped(newSkipped);
+    
   };
 
   const handleBack = () => {
@@ -79,6 +82,7 @@ export default function HorizontalLinearStepper() {
 
   const handleReset = () => {
     setActiveStep(0);
+ 
   };
 
   const BoxStyle = {
@@ -163,10 +167,14 @@ export default function HorizontalLinearStepper() {
         
 
       </FormGroup>
-      <button style={{
-        display:"block",
-        margin:"auto"
-      }} className="btn" onClick={submitHandler}>Submit</button>
+      {
+        showBtn ? <button style={{
+          display:"block",
+          margin:"auto"
+        }} className="btn" onClick={submitHandler}>Submit</button>
+        : null
+      }
+      
 
       {activeStep === steps.length ? (
         <React.Fragment>
@@ -180,7 +188,7 @@ export default function HorizontalLinearStepper() {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+          <Typography sx={{ mt: 2, mb: 1 }}></Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
